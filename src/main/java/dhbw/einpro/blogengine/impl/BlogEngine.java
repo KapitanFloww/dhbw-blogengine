@@ -68,8 +68,10 @@ public class BlogEngine implements IBlogEngine
             throw new UserNotFoundException("User not found");
         }
         //check if comment authors are valid
-        if(!existsAllCommentAuthors(p_post)) {
-            throw new UserNotFoundException("Comment user not found");
+        if(p_post.getComments() != null) {
+            if(!existsAllCommentAuthors(p_post)) {
+                throw new UserNotFoundException("Comment user not found");
+            }
         }
         this.posts.add(p_post);
         return nextPostId++;

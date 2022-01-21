@@ -1,8 +1,5 @@
 package dhbw.einpro.blogengine.impl;
 
-/**
- * Klasse repräsentiert ein Post.
- */
 import java.util.List;
 
 import dhbw.einpro.blogengine.exceptions.IllegalOperationException;

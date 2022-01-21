@@ -1,16 +1,12 @@
 package dhbw.einpro.blogengine.impl;
 
-import java.time.LocalDateTime;
-
 import dhbw.einpro.blogengine.exceptions.IllegalOperationException;
 import dhbw.einpro.blogengine.interfaces.IComment;
 import dhbw.einpro.blogengine.interfaces.IPost;
 import dhbw.einpro.blogengine.interfaces.IUser;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Klasse implementiert einen Kommentar zu einem Post.
