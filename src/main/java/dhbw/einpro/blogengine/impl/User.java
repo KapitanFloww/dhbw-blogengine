@@ -9,7 +9,7 @@ import dhbw.einpro.blogengine.interfaces.IUser;
  *
  * @author rbimaz
  */
-
+@Data
 public class User implements IUser{
 
 }

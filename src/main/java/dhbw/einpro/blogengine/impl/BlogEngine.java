@@ -18,4 +18,68 @@ import dhbw.einpro.blogengine.interfaces.IUser;
 public class BlogEngine implements IBlogEngine
 {
 
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public boolean addUser(IUser p_user) throws DuplicateEmailException, DuplicateUserException {
+        return false;
+    }
+
+    @Override
+    public boolean removeUser(IUser p_user) {
+        return false;
+    }
+
+    @Override
+    public int addPost(IPost p_post) throws UserNotFoundException {
+        return 0;
+    }
+
+    @Override
+    public void removePost(IUser p_author, int p_postId) throws PostNotFoundException, IllegalOperationException {
+
+    }
+
+    @Override
+    public List<IPost> getPosts() {
+        return null;
+    }
+
+    @Override
+    public List<IPost> findPostsByAuthor(IUser p_author) {
+        return null;
+    }
+
+    @Override
+    public IPost findPostById(int p_postId) {
+        return null;
+    }
+
+    @Override
+    public boolean containsPost(int p_postId) {
+        return false;
+    }
+
+    @Override
+    public boolean containsUser(String p_email) {
+        return false;
+    }
+
+    @Override
+    public IUser findUserByEmail(String p_email) throws UserNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<IPost> sortPostsByTitle() {
+        return null;
+    }
+
+    @Override
+    public List<IPost> findPostsByTitle(String title) {
+        return null;
+    }
 }
