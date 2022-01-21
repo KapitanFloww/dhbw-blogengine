@@ -53,7 +53,14 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public boolean removeUser(IUser p_user) {
-        return false;
+        if (p_user == null) {
+            return false;
+        }
+        if (!registeredUsers.contains(p_user)) {
+            return false;
+        }
+        this.registeredUsers.remove(p_user);
+        return true;
     }
 
     @Override
@@ -107,6 +114,8 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public IUser findUserByEmail(String p_email) throws UserNotFoundException {
+        IUser foundUser = registeredUsers.stream()
+                .filter(user -> user.getEmail().equals(p_email));
         return null;
     }
 
