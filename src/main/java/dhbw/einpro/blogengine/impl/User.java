@@ -1,8 +1,7 @@
 package dhbw.einpro.blogengine.impl;
 
-import java.util.Objects;
-
 import dhbw.einpro.blogengine.interfaces.IUser;
+import lombok.Data;
 
 /**
  * Klasse enthält Informationen zu einem Benutzer des Blog-Systems
@@ -11,5 +10,7 @@ import dhbw.einpro.blogengine.interfaces.IUser;
  */
 @Data
 public class User implements IUser{
-
+    private String firstName;
+    private String lastName;
+    private String email;
 }
