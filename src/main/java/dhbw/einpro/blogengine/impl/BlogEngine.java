@@ -1,6 +1,8 @@
 package dhbw.einpro.blogengine.impl;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import dhbw.einpro.blogengine.exceptions.DuplicateEmailException;
 import dhbw.einpro.blogengine.exceptions.DuplicateUserException;
@@ -11,21 +13,42 @@ import dhbw.einpro.blogengine.interfaces.IBlogEngine;
 import dhbw.einpro.blogengine.interfaces.IComment;
 import dhbw.einpro.blogengine.interfaces.IPost;
 import dhbw.einpro.blogengine.interfaces.IUser;
+import lombok.AllArgsConstructor;
 
 /**
  * Klasse implementiert die Funktionalität einer Blog Engine.
  */
+@AllArgsConstructor
 public class BlogEngine implements IBlogEngine
 {
+    private List<IUser> registeredUsers;
+    private List<IPost> posts;
+    private static int nextPostId = 1;
 
     @Override
     public int size() {
-        return 0;
+        return this.registeredUsers.size();
     }
 
+    //TODO wann soll false ausgeben werden?
     @Override
     public boolean addUser(IUser p_user) throws DuplicateEmailException, DuplicateUserException {
-        return false;
+        if(p_user == null) {
+            return false;
+        }
+        if(registeredUsers.contains(p_user)) {
+            throw new DuplicateUserException("User already exists");
+        }
+        if(existsMail(p_user)) {
+            throw new DuplicateEmailException("E-Mail already taken");
+        }
+        this.registeredUsers.add(p_user);
+        return true;
+    }
+
+    private boolean existsMail(IUser p_user) {
+        return registeredUsers.stream()
+                .anyMatch(user -> user.getEmail().equals(p_user.getEmail()));
     }
 
     @Override
@@ -35,7 +58,21 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public int addPost(IPost p_post) throws UserNotFoundException {
-        return 0;
+        p_post.setId(nextPostId);
+        if(!registeredUsers.contains(p_post.getAuthor())) {
+            throw new UserNotFoundException("User not found");
+        }
+        if(!commentAuthorsValid(p_post)) {
+            throw new UserNotFoundException("Comment user not found");
+        }
+        this.posts.add(p_post);
+        return nextPostId++;
+    }
+
+    private boolean commentAuthorsValid(IPost p_post) {
+        return p_post.getComments().stream()
+                .map(IComment::getAuthor)
+                .allMatch(user -> registeredUsers.contains(user));
     }
 
     @Override
