@@ -17,15 +17,33 @@ import dhbw.einpro.blogengine.interfaces.IUser;
  */
 public class BlogEngine implements IBlogEngine
 {
-
+    private List<IUser> registeredUsers;
     @Override
     public int size() {
-        return 0;
+
+        return this.registeredUsers.size();
     }
 
     @Override
     public boolean addUser(IUser p_user) throws DuplicateEmailException, DuplicateUserException {
-        return false;
+        if(p_user == null) {
+            return false;
+        }
+        if(registeredUsers.contains(p_user)) {
+            throw new DuplicateUserException("User already exists.");
+        }
+
+        if(existMail(p_user.getEmail())){
+            throw new DuplicateEmailException("E-Mail already taken");
+        }
+
+        this.registeredUsers.add(p_user);
+        return true;
+    }
+
+    public boolean existMail(String email) {
+        return registeredUsers.stream()
+                .anyMatch(iUser -> iUser.getEmail().equals(email));
     }
 
     @Override
@@ -55,7 +73,7 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public IPost findPostById(int p_postId) {
-        return null;
+        Post.
     }
 
     @Override
@@ -65,7 +83,13 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public boolean containsUser(String p_email) {
-        return false;
+
+        if (existMail(p_email)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
