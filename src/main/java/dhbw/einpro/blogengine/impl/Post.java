@@ -30,6 +30,12 @@ public class Post implements IPost
 
     private List<IComment> comments;
 
+    public Post(String titel, String content, IUser author) {
+        this.title = titel;
+        this.content = content;
+        this.author = author;
+    }
+
     @Override
     public void addComment(IComment p_comment) throws IllegalOperationException {
         if(this.getAuthor().equals(p_comment.getAuthor())) {
