@@ -1,6 +1,7 @@
 package dhbw.einpro.blogengine.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import dhbw.einpro.blogengine.exceptions.DuplicateEmailException;
 import dhbw.einpro.blogengine.exceptions.DuplicateUserException;
@@ -18,9 +19,11 @@ import dhbw.einpro.blogengine.interfaces.IUser;
 public class BlogEngine implements IBlogEngine
 {
     private List<IUser> registeredUsers;
+    private List<IPost> posts;
+    private static int nextPostId = 1;
+
     @Override
     public int size() {
-
         return this.registeredUsers.size();
     }
 
@@ -30,20 +33,13 @@ public class BlogEngine implements IBlogEngine
             return false;
         }
         if(registeredUsers.contains(p_user)) {
-            throw new DuplicateUserException("User already exists.");
+            throw new DuplicateUserException("User already exists");
         }
-
-        if(existMail(p_user.getEmail())){
+        if(containsUser(p_user.getEmail())) {
             throw new DuplicateEmailException("E-Mail already taken");
         }
-
         this.registeredUsers.add(p_user);
         return true;
-    }
-
-    public boolean existMail(String email) {
-        return registeredUsers.stream()
-                .anyMatch(iUser -> iUser.getEmail().equals(email));
     }
 
     @Override
@@ -53,7 +49,21 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public int addPost(IPost p_post) throws UserNotFoundException {
-        return 0;
+        p_post.setId(nextPostId);
+        if(!registeredUsers.contains(p_post.getAuthor())) {
+            throw new UserNotFoundException("User not found");
+        }
+        if(!commentAuthorsValid(p_post)) {
+            throw new UserNotFoundException("Comment user not found");
+        }
+        this.posts.add(p_post);
+        return nextPostId++;
+    }
+
+    private boolean commentAuthorsValid(IPost p_post) {
+        return p_post.getComments().stream()
+                .map(IComment::getAuthor)
+                .allMatch(user -> registeredUsers.contains(user));
     }
 
     @Override
@@ -73,7 +83,14 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public IPost findPostById(int p_postId) {
-        Post.
+        List<IPost> list = posts.stream()
+                .filter(iPost -> iPost.getId() == p_postId)
+                .distinct()
+                .collect(Collectors.toList());
+        if(list.size() != 1){
+            throw new IllegalStateException("No post or two posts found.");
+        }
+        return list.get(0);
     }
 
     @Override
@@ -83,13 +100,8 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public boolean containsUser(String p_email) {
-
-        if (existMail(p_email)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return registeredUsers.stream()
+                .anyMatch(iUser -> iUser.getEmail().equals(p_email));
     }
 
     @Override
