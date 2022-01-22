@@ -59,8 +59,8 @@ public class Post implements IPost
         if(this.getAuthor().equals(p_person)) {
             throw new IllegalOperationException("This post cant be liked because the user is the author of the post");
         }
-        if(!likes.contains(p_person)) {
-            likes.add(p_person);
+        if(!this.likes.contains(p_person)) {
+            this.likes.add(p_person);
         }
     }
 
@@ -75,5 +75,11 @@ public class Post implements IPost
         if(!this.disLikes.contains(p_person)) {
             this.disLikes.add(p_person);
         }
+    }
+
+    @Override
+    public int getScore() {
+        this.score = ( this.likes.size() - this.disLikes.size() ) * 10;
+        return this.score;
     }
 }
