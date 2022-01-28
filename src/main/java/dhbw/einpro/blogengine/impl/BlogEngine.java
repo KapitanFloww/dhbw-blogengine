@@ -31,10 +31,9 @@ public class BlogEngine implements IBlogEngine
 
     @Override
     public int size() {
-        return this.registeredUsers.size();
+        return registeredUsers.size();
     }
 
-    //TODO: Prof. Bimazubute fragen wann false ausgeben werden sollte?
     @Override
     public boolean addUser(IUser p_user) throws DuplicateEmailException, DuplicateUserException {
         if(p_user == null) {
@@ -48,7 +47,7 @@ public class BlogEngine implements IBlogEngine
         if(containsUser(p_user.getEmail())) {
             throw new DuplicateEmailException("E-Mail already taken");
         }
-        this.registeredUsers.add(p_user);
+        registeredUsers.add(p_user);
         return true;
     }
 
@@ -57,7 +56,7 @@ public class BlogEngine implements IBlogEngine
         if (p_user == null) {
             return false;
         }
-        return this.registeredUsers.remove(p_user);
+        return registeredUsers.remove(p_user);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class BlogEngine implements IBlogEngine
                 throw new UserNotFoundException("Comment user not found");
             }
         }
-        this.posts.add(p_post);
+        posts.add(p_post);
         return nextPostId++;
     }
 
@@ -86,7 +85,7 @@ public class BlogEngine implements IBlogEngine
         if(!post.getAuthor().equals(p_author)) {
             throw new IllegalOperationException("Author does not match");
         }
-        this.posts.remove(post);
+        posts.remove(post);
     }
 
     @Override
